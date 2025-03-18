@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Anssi Kela - nimigeneraattori</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    /* Spinner styles */
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #countdown {
+      font-size: 18px;
+      margin: 20px;
+    }
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Anssi Kela - nimigeneraattori</h1>
+  <p>Kirjoita etunimesi:</p>
+  <input type="text" id="firstName" placeholder="Etunimesi tähän">
+  <button id="generateBtn">Luo Anssi Kela - nimesi</button>
+
+  <div id="spinner" style="display:none;">
+    <div class="spinner"></div>
+  </div>
+  <div id="countdown"></div>
+  <div id="result"></div>
+
+  <script>
+    // Fixed surname that will always be used in the generated name.
+    const fixedSurname = "Kela";
+
+    // Array of snarky remarks to display during the countdown.
+    const remarks = [
+      "Odota, luodaan täydellisyyttä ...",
+      "Vielä kestää, kestätkö sinä ?",
+      "Täydellisyys ottaa aikansa!",
+      "Melkein valmis ... sinä myös ?",
+      "Tik tak tik tak ... nimimagia käynnissä",
+      "Älä räpäytä silmiäsi!",
+      "Taika ottaa aikansa",
+      "Luodaan jotain spesiaalia juuri sinua varten !",
+      "Melkein valmista – älä mene jääkaapille!",
+      "Loppusilaukset, luodaab täydellisyyttä !"
+    ];
+
+    // Get references to DOM elements.
+    const generateBtn = document.getElementById("generateBtn");
+    const firstNameInput = document.getElementById("firstName");
+    const spinner = document.getElementById("spinner");
+    const countdownDiv = document.getElementById("countdown");
+    const resultDiv = document.getElementById("result");
+
+    generateBtn.addEventListener("click", function(){
+      const firstName = firstNameInput.value.trim();
+      if(firstName === ""){
+        alert("Anna etunimesi!");
+        return;
+      }
+      
+      // Reset previous output.
+      resultDiv.innerHTML = "";
+      spinner.style.display = "block";
+      countdownDiv.innerHTML = "";
+      
+      let seconds = 9;
+      
+      // Immediately update display since 9 is a marked second.
+      let randomRemark = remarks[Math.floor(Math.random() * remarks.length)];
+      countdownDiv.innerHTML = seconds + " sekuntia jäljellä - " + randomRemark;
+      
+      const interval = setInterval(function(){
+        seconds--;
+        // Only update the display at the 6 and 3 second marks.
+        if(seconds > 0 && seconds % 3 === 0) {
+          randomRemark = remarks[Math.floor(Math.random() * remarks.length)];
+          countdownDiv.innerHTML = seconds + " sekuntia jäljellä - " + randomRemark;
+        }
+        if(seconds <= 0) {
+          clearInterval(interval);
+          spinner.style.display = "none";
+          countdownDiv.innerHTML = "Valmista tuli!";
+          resultDiv.innerHTML = "Sinun Anssi Kela - nimesi on : " + firstName + " " + fixedSurname;
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
